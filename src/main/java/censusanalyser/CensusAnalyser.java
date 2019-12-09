@@ -14,9 +14,7 @@ public class CensusAnalyser {
     public int loadIndiaCensusData(String csvFilePath) throws CensusAnalyserException {
         try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath));) {
             Iterator<IndiaCensusCSV>censusCSVIterator = this.getCSVFileIterator(reader, IndiaCensusCSV.class);
-            Iterable<IndiaCensusCSV> csvIterable=() -> censusCSVIterator;
-            int  numOfEateries = (int) StreamSupport.stream(csvIterable.spliterator(),false).count();
-            return numOfEateries;
+            return this.getCount(censusCSVIterator);
         } catch (IOException e) {
             throw new CensusAnalyserException(e.getMessage(),
                     CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM);
@@ -26,11 +24,8 @@ public class CensusAnalyser {
     public int loadIndianStateCode(String csvFilePath) throws CensusAnalyserException {
         try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath));) {
 
-            Iterator<IndiaStateCodeCSV>indiaStateCodeCSVIterator = this.getCSVFileIterator(reader,
-                    IndiaStateCodeCSV.class);
-            Iterable<IndiaStateCodeCSV> csvIterable=() -> indiaStateCodeCSVIterator;
-            int  numOfEateries = (int) StreamSupport.stream(csvIterable.spliterator(),false).count();
-            return numOfEateries;
+            Iterator<IndiaStateCodeCSV> indiaStateCodeCSVIterator = this.getCSVFileIterator(reader, IndiaStateCodeCSV.class);
+            return this.getCount(indiaStateCodeCSVIterator);
         } catch (IOException e) {
             throw new CensusAnalyserException(e.getMessage(),
                     CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM);
@@ -42,6 +37,13 @@ public class CensusAnalyser {
 
         }
         return 0;
+    }
+
+
+    private<E> int getCount(Iterator<E> iterator) {
+        Iterable<E> csvIterable=() -> iterator;
+        int  numOfEateries = (int) StreamSupport.stream(csvIterable.spliterator(),false).count();
+        return numOfEateries;
     }
 
     private <E> Iterator<E> getCSVFileIterator(Reader reader,
