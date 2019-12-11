@@ -119,4 +119,16 @@ public class CensusAnalyserTest {
             Assert.assertEquals("Bihar", censusCSV[28].state);
         } catch (CensusAnalyserException e) { }
     }
+
+    @Test
+    public void givenIndianCensusData_WhenSortedOnArea_ShouldReturnSortedResult() {
+        CensusAnalyser censusAnalyser = new CensusAnalyser();
+        try {
+            censusAnalyser.loadIndiaCensusData(INDIA_CENSUS_CSV_FILE_PATH);
+            censusAnalyser.loadIndianStateCode(INDIAN_STATE_CODE);
+            String sortedCensusData = censusAnalyser.getAreaSortedCensusData();
+            IndiaStateCodeDAO[] censusCSV = new Gson().fromJson(sortedCensusData, IndiaStateCodeDAO[].class);
+            Assert.assertEquals("Rajasthan", censusCSV[28].state);
+        } catch (CensusAnalyserException e) { }
+    }
 }
