@@ -86,4 +86,15 @@ public class CensusAnalyser {
             }
         }
     }
+
+    public String getPopulationSortedCensusData() throws CensusAnalyserException {
+        if (censusStateMap == null || censusStateMap.size()==0) {
+            throw new CensusAnalyserException("No Census Data",CensusAnalyserException.ExceptionType.NO_CENSUS_DATA);
+        }
+        Comparator<IndiaCensusDAO>censusDAOComparator = Comparator.comparing(census -> census.population);
+        List<IndiaCensusDAO>censusDAOS= censusStateMap.values().stream().collect(Collectors.toList());
+        this.sort(censusDAOS,censusDAOComparator);
+        String sortedPopulationJson = new Gson().toJson(censusDAOS);
+        return sortedPopulationJson;
+    }
 }
