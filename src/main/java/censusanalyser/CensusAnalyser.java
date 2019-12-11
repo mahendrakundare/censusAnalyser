@@ -45,10 +45,10 @@ public class CensusAnalyser {
     public int loadIndianStateCode(String csvFilePath) throws CensusAnalyserException {
         try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath));) {
             ICSVBuilder csvBuilder = createCSVBuilder();
-            Iterator<IndiaStateCodeCSV> csvFileIterator = csvBuilder
-                    .getCSVFileIterator(reader, IndiaStateCodeCSV.class);
+            Iterator<IndiaStateCodeDAO> csvFileIterator = csvBuilder
+                    .getCSVFileIterator(reader, IndiaStateCodeDAO.class);
             while (csvFileIterator.hasNext()) {
-                IndiaStateCodeCSV stateCodeCSV = csvFileIterator.next();
+                IndiaStateCodeDAO stateCodeCSV = csvFileIterator.next();
                 IndiaCensusDAO censusDAO = censusStateMap.get(stateCodeCSV.state);
                 if (censusDAO == null) continue;
                 censusDAO.stateCode = stateCodeCSV.stateCode;
@@ -92,6 +92,17 @@ public class CensusAnalyser {
             throw new CensusAnalyserException("No Census Data",CensusAnalyserException.ExceptionType.NO_CENSUS_DATA);
         }
         Comparator<IndiaCensusDAO>censusDAOComparator = Comparator.comparing(census -> census.population);
+        List<IndiaCensusDAO>censusDAOS= censusStateMap.values().stream().collect(Collectors.toList());
+        this.sort(censusDAOS,censusDAOComparator);
+        String sortedPopulationJson = new Gson().toJson(censusDAOS);
+        return sortedPopulationJson;
+    }
+
+    public String getDensitySortedCensusData() throws CensusAnalyserException {
+        if (censusStateMap == null || censusStateMap.size()==0) {
+            throw new CensusAnalyserException("No Census Data",CensusAnalyserException.ExceptionType.NO_CENSUS_DATA);
+        }
+        Comparator<IndiaCensusDAO>censusDAOComparator = Comparator.comparing(census -> census.densityPerSqKm);
         List<IndiaCensusDAO>censusDAOS= censusStateMap.values().stream().collect(Collectors.toList());
         this.sort(censusDAOS,censusDAOComparator);
         String sortedPopulationJson = new Gson().toJson(censusDAOS);
