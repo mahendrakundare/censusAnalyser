@@ -1,7 +1,5 @@
 package censusanalyser;
 
-import java.util.Iterator;
-
 public class IndiaCensusDAO {
 
     public String state;

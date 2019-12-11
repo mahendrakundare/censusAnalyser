@@ -1,10 +1,8 @@
 package censusanalyser;
 
 import com.bridgelabz.csvbuilder.CSVBuilderException;
-import com.bridgelabz.csvbuilder.CSVBuilderFactory;
 import com.bridgelabz.csvbuilder.ICSVBuilder;
 import com.google.gson.Gson;
-
 
 import java.io.IOException;
 import java.io.Reader;
@@ -13,6 +11,9 @@ import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
+
+import static com.bridgelabz.csvbuilder.CSVBuilderFactory.createCSVBuilder;
+
 
 public class CensusAnalyser {
 
@@ -24,7 +25,7 @@ public class CensusAnalyser {
 
     public int loadIndiaCensusData(String csvFilePath) throws CensusAnalyserException {
         try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath));) {
-            ICSVBuilder csvBuilder = CSVBuilderFactory.createCSVBuilder();
+            ICSVBuilder csvBuilder = createCSVBuilder();
             Iterator<IndiaCensusCSV> csvFileIterator = csvBuilder.getCSVFileIterator(reader, IndiaCensusCSV.class);
             Iterable<IndiaCensusCSV> csvIterable = () -> csvFileIterator;
             StreamSupport.stream(csvIterable.spliterator(), false).
@@ -43,7 +44,7 @@ public class CensusAnalyser {
 
     public int loadIndianStateCode(String csvFilePath) throws CensusAnalyserException {
         try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath));) {
-            ICSVBuilder csvBuilder = CSVBuilderFactory.createCSVBuilder();
+            ICSVBuilder csvBuilder = createCSVBuilder();
             Iterator<IndiaStateCodeCSV> csvFileIterator = csvBuilder
                     .getCSVFileIterator(reader, IndiaStateCodeCSV.class);
             while (csvFileIterator.hasNext()) {
