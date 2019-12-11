@@ -4,11 +4,12 @@ import java.util.Iterator;
 
 public class IndiaCensusDAO {
 
-
+    public String state;
+    public String stateCode;
     public int population;
     public int densityPerSqKm;
     public int areaInSqKm;
-    public String state;
+
 
     public IndiaCensusDAO(IndiaCensusCSV csvFileIterator) {
         state = csvFileIterator.state;

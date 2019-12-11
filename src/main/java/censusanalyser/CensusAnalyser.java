@@ -26,11 +26,10 @@ public class CensusAnalyser {
     public int loadIndiaCensusData(String csvFilePath) throws CensusAnalyserException {
         try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath));) {
             ICSVBuilder csvBuilder = CSVBuilderFactory.createCSVBuilder();
-//            Iterator csvFileIterator = csvBuilder.getCSVFileList(reader, IndiaCensusCSV.class);
             Iterator<IndiaCensusCSV> csvFileIterator = csvBuilder.getCSVFileIterator(reader,IndiaCensusCSV.class);
-            while (csvFileIterator.hasNext()) {
-                this.censusList.add(new IndiaCensusDAO(csvFileIterator.next()));
-            }
+            Iterable<IndiaCensusCSV> csvIterable = () -> csvFileIterator;
+            StreamSupport.stream(csvIterable.spliterator(),false).
+                                        forEach(indiaCensusCSV -> censusList.add(new IndiaCensusDAO(indiaCensusCSV)));
             return censusList.size();
         } catch (IOException e) {
             throw new CensusAnalyserException(e.getMessage(),
