@@ -1,4 +1,4 @@
-package censusanalyser;
+package com.bridgelabz.csvbuilder;
 
 import java.io.Reader;
 import java.util.Iterator;

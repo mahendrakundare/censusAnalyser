@@ -1,11 +1,14 @@
-package censusanalyser;
+package com.bridgelabz.csvbuilder;
+
+import javax.tools.Tool;
 
 public class CSVBuilderException extends Exception {
-    enum ExceptionType {
+
+   public enum ExceptionType {
         CENSUS_FILE_PROBLEM, UNABLE_TO_PARSE,NO_CENSUS_DATA,DELIMITER_OR_HEADER_PROBLEM
     }
 
-   ExceptionType type;
+   public ExceptionType type;
 
     public CSVBuilderException(String message, CSVBuilderException.ExceptionType type) {
         super(message);
