@@ -103,10 +103,20 @@ public class CensusAnalyserTest {
             censusAnalyser.loadIndiaCensusData(INDIA_CENSUS_CSV_FILE_PATH);
             censusAnalyser.loadIndianStateCode(INDIAN_STATE_CODE);
             String sortedCensusData = censusAnalyser.getPopulationSortedCensusData();
-            IndiaStateCodeCSV[] censusCSV = new Gson().fromJson(sortedCensusData, IndiaStateCodeCSV[].class);
+            IndiaStateCodeDAO[] censusCSV = new Gson().fromJson(sortedCensusData, IndiaStateCodeDAO[].class);
             Assert.assertEquals("Uttar Pradesh", censusCSV[28].state);
-        } catch (CensusAnalyserException e) {
-            e.printStackTrace();
-        }
+        } catch (CensusAnalyserException e) { }
+    }
+
+    @Test
+    public void givenIndianCensusData_WhenSortedOnDensity_ShouldReturnSortedResult() {
+        CensusAnalyser censusAnalyser = new CensusAnalyser();
+        try {
+            censusAnalyser.loadIndiaCensusData(INDIA_CENSUS_CSV_FILE_PATH);
+            censusAnalyser.loadIndianStateCode(INDIAN_STATE_CODE);
+            String sortedCensusData = censusAnalyser.getDensitySortedCensusData();
+            IndiaStateCodeDAO[] censusCSV = new Gson().fromJson(sortedCensusData, IndiaStateCodeDAO[].class);
+            Assert.assertEquals("Bihar", censusCSV[28].state);
+        } catch (CensusAnalyserException e) { }
     }
 }
