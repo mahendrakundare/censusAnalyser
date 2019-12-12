@@ -15,24 +15,32 @@ import java.util.stream.StreamSupport;
 import static com.bridgelabz.csvbuilder.CSVBuilderFactory.createCSVBuilder;
 
 public class CensusLoader {
+    public <E> Map<String, CensusDAO> loadCensusData(CensusAnalyser.Country country, String... csvFilePath) throws CensusAnalyserException {
+        if (country.equals(CensusAnalyser.Country.INDIA))
+            return this.loadCensusData(IndiaCensusCSV.class, csvFilePath);
+        else if (country.equals(CensusAnalyser.Country.US))
+            return this.loadCensusData(USCensusCSV.class, csvFilePath);
+        return null;
+    }
+
 
     public <E> Map<String, CensusDAO> loadCensusData(Class<E> censusCSVClass, String... csvFilePath) throws CensusAnalyserException {
-        Map<String, CensusDAO> censusStateMap=new HashMap<>();
+        Map<String, CensusDAO> censusStateMap = new HashMap<>();
         try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath[0]));) {
             ICSVBuilder csvBuilder = createCSVBuilder();
             Iterator<E> csvFileIterator = csvBuilder.getCSVFileIterator(reader, censusCSVClass);
             Iterable<E> csvIterable = () -> csvFileIterator;
-            if (censusCSVClass.getName().equals("censusanalyser.IndiaCensusCSV")){
+            if (censusCSVClass.getName().equals("censusanalyser.IndiaCensusCSV")) {
                 StreamSupport.stream(csvIterable.spliterator(), false).
                         map(IndiaCensusCSV.class::cast).
                         forEach(censusCSV -> censusStateMap.put(censusCSV.state, new CensusDAO(censusCSV)));
-            } else if(censusCSVClass.getName().equals("censusanalyser.USCensusCSV")) {
+            } else if (censusCSVClass.getName().equals("censusanalyser.USCensusCSV")) {
                 StreamSupport.stream(csvIterable.spliterator(), false).
                         map(USCensusCSV.class::cast).
                         forEach(censusCSV -> censusStateMap.put(censusCSV.state, new CensusDAO(censusCSV)));
             }
-            if (csvFilePath.length==1) return censusStateMap;
-            this.loadIndianStateCode(censusStateMap,csvFilePath[1]);
+            if (csvFilePath.length == 1) return censusStateMap;
+            this.loadIndianStateCode(censusStateMap, csvFilePath[1]);
             return censusStateMap;
         } catch (IOException e) {
             throw new CensusAnalyserException(e.getMessage(),
