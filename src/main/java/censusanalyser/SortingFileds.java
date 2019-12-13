@@ -24,4 +24,8 @@ public class SortingFileds {
         Comparator<CensusDAO> comparator = sortByFields.get(parameter);
         return comparator;
     }
+
+//    public static Comparator getParam(SortingFileds.fields field1, SortingFileds.fields field2) {
+//        Comparator<CensusDAO> stateComparator = Comparator.comparing()
+//    }
 }

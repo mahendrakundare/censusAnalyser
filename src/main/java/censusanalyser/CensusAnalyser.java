@@ -39,4 +39,18 @@ public class CensusAnalyser {
         String sortedStateCensusJson = new Gson().toJson(censusDTO);
         return sortedStateCensusJson;
     }
+
+    public String getSortedCensusDataUsingTwoFields(SortingFileds.fields field1, SortingFileds.fields field2) throws CensusAnalyserException {
+        if (censusStateMap == null || censusStateMap.size() == 0) {
+            throw new CensusAnalyserException("No Census Data",
+                    CensusAnalyserException.ExceptionType.NO_CENSUS_DATA);
+        }
+        Comparator<CensusDAO> censusCSVComparator = SortingFileds.getParameter(field1).thenComparing(SortingFileds.getParameter(field2));
+        ArrayList censusDTO = censusStateMap.values().stream().
+                sorted(censusCSVComparator).
+                map(censusDAO -> censusDAO.getCensusDTO(country)).
+                collect(Collectors.toCollection(ArrayList::new));
+        String sortedStateCensusJson = new Gson().toJson(censusDTO);
+        return sortedStateCensusJson;
+    }
 }

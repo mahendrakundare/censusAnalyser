@@ -12,6 +12,7 @@ public class CensusAnalyserTest {
     private static final String INDIAN_STATE_CODE = "./src/test/resources/IndiaStateCode.csv";
     private static final String WRONG_FILE_TYPE = "./src/test/resources/IndianStateCensus.txt";
     private static final String US_CENSUS_CSV_FILE = "./src/test/resources/USCensusData.csv";
+    private static final String COMMON_FIELD_FILE="./src/test/resources/commonfileds.csv";
 
     @Test
     public void givenIndianCensusCSVFileReturnsCorrectRecords() {
@@ -166,12 +167,12 @@ public class CensusAnalyserTest {
 
     @Test
     public void givenUSCensusData_WhenSortedOnArea_ShouldReturnSortedResult() {
-        CensusAnalyser censusAnalyser = new CensusAnalyser(CensusAnalyser.Country.US);
+        CensusAnalyser censusAnalyser = new CensusAnalyser(CensusAnalyser.Country.INDIA);
         try {
-            censusAnalyser.loadCensusData(US_CENSUS_CSV_FILE);
-            String sortedData = censusAnalyser.getSortedCensusData(SortingFileds.fields.AREA);
+            censusAnalyser.loadCensusData(COMMON_FIELD_FILE,INDIAN_STATE_CODE);
+            String sortedData = censusAnalyser.getSortedCensusDataUsingTwoFields(SortingFileds.fields.POPULATION,SortingFileds.fields.DENSITY);
             CensusDAO[] censusDAOS = new Gson().fromJson(sortedData, CensusDAO[].class);
-            Assert.assertEquals("Alaska",censusDAOS[0].state);
+            Assert.assertEquals("Maharashtra",censusDAOS[0].state);
         } catch (CensusAnalyserException e) { }
     }
 }
