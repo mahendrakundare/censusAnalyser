@@ -170,9 +170,9 @@ public class CensusAnalyserTest {
         CensusAnalyser censusAnalyser = new CensusAnalyser(CensusAnalyser.Country.INDIA);
         try {
             censusAnalyser.loadCensusData(COMMON_FIELD_FILE,INDIAN_STATE_CODE);
-            String sortedData = censusAnalyser.getSortedCensusDataUsingTwoFields(SortingFileds.fields.POPULATION,SortingFileds.fields.DENSITY);
+            String sortedData = censusAnalyser.getSortedCensusData(SortingFileds.fields.POPULATION,SortingFileds.fields.DENSITY);
             CensusDAO[] censusDAOS = new Gson().fromJson(sortedData, CensusDAO[].class);
-            Assert.assertEquals("Maharashtra",censusDAOS[0].state);
+            Assert.assertEquals("Bihar",censusDAOS[0].state);
         } catch (CensusAnalyserException e) { }
     }
 }

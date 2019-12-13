@@ -26,26 +26,19 @@ public class CensusAnalyser {
         return censusStateMap.size();
     }
 
-    public String getSortedCensusData(SortingFileds.fields fields) throws CensusAnalyserException {
+    public String getSortedCensusData(SortingFileds.fields... fields) throws CensusAnalyserException {
+        Comparator<CensusDAO> censusCSVComparator=null;
         if (censusStateMap == null || censusStateMap.size() == 0) {
             throw new CensusAnalyserException("No Census Data",
                     CensusAnalyserException.ExceptionType.NO_CENSUS_DATA);
         }
-        Comparator<CensusDAO> censusCSVComparator = SortingFileds.getParameter(fields);
-        ArrayList censusDTO = censusStateMap.values().stream().
-                sorted(censusCSVComparator).
-                map(censusDAO -> censusDAO.getCensusDTO(country)).
-                collect(Collectors.toCollection(ArrayList::new));
-        String sortedStateCensusJson = new Gson().toJson(censusDTO);
-        return sortedStateCensusJson;
-    }
+        if (fields.length==2){
+            censusCSVComparator = SortingFileds.getParameter(fields[0]).thenComparing(SortingFileds.getParameter(fields[0]));
+        }
+        else {
 
-    public String getSortedCensusDataUsingTwoFields(SortingFileds.fields field1, SortingFileds.fields field2) throws CensusAnalyserException {
-        if (censusStateMap == null || censusStateMap.size() == 0) {
-            throw new CensusAnalyserException("No Census Data",
-                    CensusAnalyserException.ExceptionType.NO_CENSUS_DATA);
+            censusCSVComparator = SortingFileds.getParameter(fields[0]);
         }
-        Comparator<CensusDAO> censusCSVComparator = SortingFileds.getParameter(field1).thenComparing(SortingFileds.getParameter(field2));
         ArrayList censusDTO = censusStateMap.values().stream().
                 sorted(censusCSVComparator).
                 map(censusDAO -> censusDAO.getCensusDTO(country)).
