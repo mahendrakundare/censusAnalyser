@@ -8,14 +8,14 @@ import java.util.stream.Collectors;
 
 public class CensusAnalyser {
 
-    public enum Country{ INDIA,US };
+    public enum Country{ INDIA,US }
     Map<String, CensusDAO> censusStateMap = null;
-
     public CensusAnalyser() { }
 
     public int loadCensusData(Country country,String... csvFilePath) throws CensusAnalyserException {
-       censusStateMap= new CensusLoader().loadCensusData(country,csvFilePath);
-       return censusStateMap.size();
+        CensusAdapter censusAdapter = AnalyserFactory.createObject(country);
+        censusStateMap=censusAdapter.loadCensusData(csvFilePath);
+        return censusStateMap.size();
     }
 
     public String getStateWiseSortedCensusData() throws CensusAnalyserException {

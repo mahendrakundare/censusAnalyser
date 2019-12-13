@@ -7,13 +7,11 @@ public class CensusDAO {
     public int population;
     public double populationDensity;
     public double totalArea;
-
-
-    public CensusDAO(IndiaCensusCSV csvFileIterator) {
-        state = csvFileIterator.state;
-        totalArea =csvFileIterator.areaInSqKm;
-        populationDensity =csvFileIterator.densityPerSqKm;
-        population=csvFileIterator.population;
+    public CensusDAO(IndiaCensusCSV indiaCensusCSV) {
+        state = indiaCensusCSV.state;
+        totalArea =indiaCensusCSV.areaInSqKm;
+        populationDensity =indiaCensusCSV.densityPerSqKm;
+        population=indiaCensusCSV.population;
     }
 
     public CensusDAO(USCensusCSV censusCSV) {
@@ -22,11 +20,6 @@ public class CensusDAO {
         population = censusCSV.population;
         populationDensity = censusCSV.populationDensity;
         totalArea=censusCSV.totalArea;
-    }
-
-
-    public IndiaCensusCSV getIndiaCensusCSV() {
-        return new IndiaCensusCSV(state, population,(int)populationDensity,(int) totalArea);
     }
 
     @Override

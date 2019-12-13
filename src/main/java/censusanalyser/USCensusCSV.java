@@ -16,5 +16,5 @@ public class USCensusCSV {
     public double totalArea;
 
     @CsvBindByName(column = "Population Density",required = true)
-    public int populationDensity;
+    public double populationDensity;
 }
