@@ -2,7 +2,6 @@ package censusanalyser;
 
 public class AnalyserFactory {
 
-
     public static CensusAdapter createObject(CensusAnalyser.Country country) throws CensusAnalyserException {
         if(country.equals(CensusAnalyser.Country.INDIA))
             return new IndiaCensusAdapter();

@@ -1,5 +1,6 @@
 package censusanalyser;
 
+import com.google.gson.Gson;
 import org.junit.Assert;
 import org.junit.Test;
 import java.util.Map;
@@ -18,11 +19,17 @@ public class IndianCensusAdapterTest {
             Map<String ,CensusDAO> resultMap =indiaCensusAdapter.loadCensusData(INDIA_CENSUS_CSV_FILE_PATH,INDIAN_STATE_CODE);
             Assert.assertEquals(29,resultMap.size());
             } catch (CensusAnalyserException e) { }
-
         }
 
     @Test
-    public void givenIndianCensusCSVPassingOnlyOneFile_ShouldThrowException() {
-
+    public void givenData_ShouldReturnSortedResult() {
+        CensusAnalyser censusAnalyser = new CensusAnalyser(CensusAnalyser.Country.INDIA);
+        try {
+            CensusAdapter indiaCensusAdapter= new IndiaCensusAdapter();
+            censusAnalyser.loadCensusData(INDIA_CENSUS_CSV_FILE_PATH,INDIAN_STATE_CODE);
+            String sortedData = censusAnalyser.getSortedCensusData(SortingFileds.fields.STATE);
+            CensusDAO[] censusDAOS = new Gson().fromJson(sortedData,CensusDAO[].class);
+            Assert.assertEquals("",censusDAOS[0].state);
+        } catch (CensusAnalyserException e) { }
     }
 }
