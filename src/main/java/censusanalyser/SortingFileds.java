@@ -1,11 +1,9 @@
 package censusanalyser;
-
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
 public class SortingFileds {
-
     static Map<fields, Comparator> sortByFields = new HashMap<>();
 
     enum fields {
@@ -24,8 +22,4 @@ public class SortingFileds {
         Comparator<CensusDAO> comparator = sortByFields.get(parameter);
         return comparator;
     }
-
-//    public static Comparator getParam(SortingFileds.fields field1, SortingFileds.fields field2) {
-//        Comparator<CensusDAO> stateComparator = Comparator.comparing()
-//    }
 }

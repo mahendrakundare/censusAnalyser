@@ -1,8 +1,6 @@
 package censusanalyser;
-
 import com.bridgelabz.csvbuilder.CSVBuilderException;
 import com.bridgelabz.csvbuilder.ICSVBuilder;
-
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.file.Files;
@@ -10,11 +8,9 @@ import java.nio.file.Paths;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.stream.StreamSupport;
-
 import static com.bridgelabz.csvbuilder.CSVBuilderFactory.createCSVBuilder;
 
 public class IndiaCensusAdapter extends CensusAdapter {
-
     @Override
     public Map<String, CensusDAO> loadCensusData(String... csvFilePath) throws CensusAnalyserException {
         Map<String, CensusDAO> censusStateMap = super.loadCensusData(IndiaCensusCSV.class, csvFilePath[0]);

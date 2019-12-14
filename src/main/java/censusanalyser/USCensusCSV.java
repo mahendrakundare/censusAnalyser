@@ -1,9 +1,7 @@
 package censusanalyser;
-
 import com.opencsv.bean.CsvBindByName;
 
 public class USCensusCSV {
-
     @CsvBindByName(column = "State", required = true)
     public String state;
 

@@ -1,27 +1,19 @@
 package censusanalyser;
-
 import com.google.gson.Gson;
-
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class CensusAnalyser {
-
     private Country country;
-
     public enum Country {INDIA, US}
-
     Map<String, CensusDAO> censusStateMap = null;
-
-    public CensusAnalyser() {
-    }
-
+    public CensusAnalyser() { }
     public CensusAnalyser(Country country) {
         this.country = country;
     }
 
     public int loadCensusData(String... csvFilePath) throws CensusAnalyserException {
-        CensusAdapter censusAdapter = AnalyserFactory.createObject(country);
+        CensusAdapter censusAdapter = CensusFactory.getClassObject(country);
         censusStateMap = censusAdapter.loadCensusData(csvFilePath);
         return censusStateMap.size();
     }
@@ -33,10 +25,9 @@ public class CensusAnalyser {
                     CensusAnalyserException.ExceptionType.NO_CENSUS_DATA);
         }
         if (fields.length==2){
-            censusCSVComparator = SortingFileds.getParameter(fields[0]).thenComparing(SortingFileds.getParameter(fields[0]));
+            censusCSVComparator = SortingFileds.getParameter(fields[0]).thenComparing(SortingFileds.getParameter(fields[1]));
         }
         else {
-
             censusCSVComparator = SortingFileds.getParameter(fields[0]);
         }
         ArrayList censusDTO = censusStateMap.values().stream().
